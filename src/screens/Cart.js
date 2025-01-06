@@ -48,12 +48,14 @@ const Cart = () => {
       <Modal transparent={true} visible={!!modalVisible}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalText}>¿Eliminar producto?</Text>
+          <View style={styles.modalButtonsContainer}>
           <Pressable onPress={() => handleRemoveProduct(modalVisible)}>
             <Text style={styles.confirmText}>Sí</Text>
           </Pressable>
           <Pressable onPress={() => setModalVisible(false)}>
             <Text style={styles.cancelText}>No</Text>
           </Pressable>
+          </View>
         </View>
       </Modal>
 
@@ -90,39 +92,72 @@ containerTotal:{
     justifyContent:"space-around",
     alignItems:"center",
     position:"absolute",
-    bottom:0
+    bottom:0,
+    borderColor:colors.color1,
+    borderWidth:4
 },
 text:{
     color:colors.lightGray,
-    fontSize:16
+    fontSize:16,
+    fontFamily:"londrinaRegular"
 },
 button:{
     backgroundColor:colors.primary,
     padding:10,
-    borderRadius:5
+    borderRadius:5,
 },
 buttonText:{
-    color:colors.lightGray
+    color:colors.lightGray,
+    fontFamily:"londrinaRegular",
+    fontSize:16
 },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.7)',
   },
   modalText: {
-    backgroundColor: colors.lightGray,
+    // backgroundColor: colors.lightGray,
+    // padding: 20,
+    // borderRadius: 10,
+    // textAlign: 'center',
+    backgroundColor: colors.primary,
     padding: 20,
     borderRadius: 10,
     textAlign: 'center',
+    fontSize: 18,
+    fontFamily: 'londrinaRegular',
+    borderColor: colors.color1,
+    borderWidth: 4
+  },
+  modalButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    gap: 20, // Espaciado entre los botones (puedes ajustarlo según lo necesites)
   },
   confirmText: {
-    color: colors.primary,
+    paddingHorizontal:14,
     marginTop: 10,
+    color: colors.primary,
+    fontSize: 24,
+    fontFamily: 'londrinaRegular',
+    borderColor: colors.color1,
+    borderRadius: 10,
+    padding: 8,
+    borderWidth: 4
   },
   cancelText: {
-    color: colors.accent,
+    paddingHorizontal:14,
     marginTop: 10,
+    color: colors.primary,
+    fontSize: 24,
+    fontFamily: 'londrinaRegular',
+    borderColor: colors.color1,
+    borderRadius: 10,
+    padding: 8,
+    borderWidth: 4
   },
 });
 

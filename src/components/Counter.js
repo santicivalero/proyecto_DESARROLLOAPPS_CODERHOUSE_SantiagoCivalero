@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { StyleSheet, View, Pressable, Text, TextInput } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { increment, decrement, incrementByAmount } from '../features/counterSlice';
@@ -7,7 +7,7 @@ import { colors } from '../globals/colors';
 const Counter = ({ onQuantityChange }) => {
   const dispatch = useDispatch();
   const counter = useSelector((state) => state.counter.value);
-  const [input, setInput] = React.useState(0);
+  const [input, setInput] = useState(0);
 
   const handleIncrement = () => {
     dispatch(increment());
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   button: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 10,
     backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",

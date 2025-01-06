@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import Counter from '../components/Counter';
 import { colors } from '../globals/colors';
 import images from '../../imageAssets.js';
+import { useNavigation } from '@react-navigation/native';
 
 const ProductDetail = ({ route }) => {
   const { product } = route.params;
@@ -13,8 +14,10 @@ const ProductDetail = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const handleAddToCart = () => {
+    if (quantity <= 0) return;
     const productWithQuantity = { ...product, quantity };
     dispatch(addProduct(productWithQuantity));
     // dispatch(addProduct(product));
@@ -32,9 +35,19 @@ const ProductDetail = ({ route }) => {
         <Text style={styles.textButton}>Agregar al carrito</Text>
       </Pressable>
 
-      <Modal transparent={true} visible={modalVisible} animationType="slide">
+      <Modal transparent={true} visible={modalVisible} animationType="fade">
         <View style={styles.modalContainer}>
+          {quantity > 1 ? 
+          <Text style={styles.modalText}>Productos agregados al carrito</Text> 
+          : 
           <Text style={styles.modalText}>Producto agregado al carrito</Text>
+          }
+          <Pressable>
+            <Text style={styles.modalTextCarrito} 
+                  onPress={() => navigation.navigate('CartStack', { screen: 'Cart' })}>
+              Ir al carrito
+              </Text>
+          </Pressable>
           <Pressable onPress={() => setModalVisible(false)}>
             <Text style={styles.closeModal}>Cerrar</Text>
           </Pressable>
@@ -95,7 +108,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: 'rgba(0,0,0,0.9)',
   },
   modalText: {
     backgroundColor: colors.primary,
@@ -104,7 +117,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     fontFamily: 'londrinaRegular',
-    borderColor: colors.color1,
+    borderColor: colors.primary,
+    borderWidth: 4
+  },
+  modalTextCarrito: {
+    backgroundColor: colors.color1,
+    padding: 10,
+    marginTop: 70,
+    borderRadius: 10,
+    textAlign: 'center',
+    fontSize: 18,
+    fontFamily: 'londrinaRegular',
+    borderColor: colors.primary,
     borderWidth: 4
   },
   closeModal: {
