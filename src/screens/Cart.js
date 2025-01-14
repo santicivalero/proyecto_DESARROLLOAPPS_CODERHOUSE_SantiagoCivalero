@@ -6,6 +6,7 @@ import CardCartProduct from '../components/CardCartProduct';
 import { colors } from '../globals/colors';
 import { usePostOrdersMutation } from '../services/orders';
 
+
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const [modalVisible, setModalVisible] = useState(false);
@@ -13,10 +14,27 @@ const Cart = () => {
   const dispatch = useDispatch();
   const [triggerPost] = usePostOrdersMutation();
 
-  const confirmCart = () => {
+  const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+
+
+  const confirmCart = async () => {
     setConfirmVisible(false);
-    triggerPost({ id: '2', products: cart.products, total: cart.total });
-    dispatch(clearCart());
+    try {
+      const newOrder = {
+        id: generateId(),
+        products: cart.products,
+        total: cart.total,
+        date: new Date().toISOString(), // Agregar la fecha
+      };
+      await triggerPost(newOrder); // Enviar los datos al servicio
+      console.log("Carrito confirmado:", newOrder);
+      dispatch(clearCart()); // Limpiar el carrito después de confirmar la compra
+    } catch (error) {
+      console.error("Error al confirmar el carrito:", error);
+    }
+
+    // triggerPost({ id: '2', products: cart.products, total: cart.total });
+    // dispatch(clearCart());
   };
 
   const handleRemoveProduct = (productId) => {

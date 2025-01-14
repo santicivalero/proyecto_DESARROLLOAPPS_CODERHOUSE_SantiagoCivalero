@@ -1,3 +1,4 @@
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry"
 import { base_url } from "../database"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
@@ -6,14 +7,17 @@ export const ordersApi = createApi({
     baseQuery:fetchBaseQuery({baseUrl:base_url}),
     endpoints:(builder)=> ({
         postOrders:builder.mutation({
-            query:({...order}) => ({
+            query:({...newOrder}) => ({
                 url:"orders.json",
                 method:"POST",
-                body:order
-            })
+                body:newOrder
+            }),
         }),
+        getOrders:builder.query({
+            query:() => "orders.json"
+        })
        
     })
 })
 
-export const {usePostOrdersMutation } = ordersApi
+export const {usePostOrdersMutation, useGetOrdersQuery } = ordersApi
