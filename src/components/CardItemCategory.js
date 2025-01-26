@@ -9,11 +9,11 @@ import { setProductsFilteredByCategory } from '../features/shopSlice'
 const CardItemCategory = ({item:category}) => {
 
   const navigation = useNavigation()
-  const dispatch = useDispatch()
+  //const dispatch = useDispatch()
 
   return (
     <Pressable onPress={()=> {
-      dispatch(setProductsFilteredByCategory(category))
+      //dispatch(setProductsFilteredByCategory(category))
       navigation.navigate("ProductsByCategory",{category})
 
       }}>

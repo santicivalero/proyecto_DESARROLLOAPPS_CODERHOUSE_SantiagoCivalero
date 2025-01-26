@@ -8,8 +8,7 @@ import { colors } from '../globals/colors'
 
 
 const ProductsByCategory = ({route}) => {
-
-
+  
   const {category} = route.params
   const {data,isSuccess,isError,error,isLoading} = useGetProductsQuery(category)
   const [keyword,setKeyword] = useState("")
@@ -29,7 +28,6 @@ const ProductsByCategory = ({route}) => {
 
   },[keyword,isSuccess])
 
-  //if(isLoading) return <View><Text>cargando</Text></View>
   if(isLoading) return <ActivityIndicator size="large" color={colors.primary} style={styles.spinner} />
   if(isError) return <View><Text>{error.message}</Text></View>
 

@@ -11,10 +11,9 @@ const CardOrder = ({ order }) => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.text}>{date}</Text>
+        <Text style={styles.text}>{order.createdAt}</Text>
         <Text style={styles.text}>Total: ${order.total}</Text>
       </View>
-      {/* Abrir modal al presionar el ícono */}
       <AntDesign
         name="search1"
         size={30}

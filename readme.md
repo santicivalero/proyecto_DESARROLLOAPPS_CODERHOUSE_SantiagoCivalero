@@ -1,6 +1,7 @@
 # E-Commerce App - React Native
 
-Una aplicación de comercio electrónico desarrollada con React Native que ofrece una experiencia de compra completa y fácil de usar.
+Una aplicación de comercio electrónico desarrollada con React Native que ofrece una experiencia de compra completa y fácil de usar. Es la versión de app móvil
+de un proyecto hecho para React, con algunas variantes en tecnologías: https://github.com/santicivalero/proyecto_REACTFLEX_CODERHOUSE_SantiagoCivalero
 
 ## Funcionalidades Principales
 
@@ -8,9 +9,6 @@ Una aplicación de comercio electrónico desarrollada con React Native que ofrec
 
 - **Acceso seguro:** Solo los usuarios autenticados pueden acceder a la pantalla de perfil y realizar compras.
 - **Información del usuario:** Muestra detalles del usuario, como nombre y dirección.
-
-<img src="./screenshot/Screenshot_1737498571.png" width="300" >
-<img src="./screenshot/Screenshot_1737498674.png" width="300" >
 
 ### Autenticación con Firebase
 
@@ -31,74 +29,21 @@ Una aplicación de comercio electrónico desarrollada con React Native que ofrec
 ### Pantalla de Detalles del Producto
 
 - Proporciona una descripción detallada del producto.
-- Muestra el precio y el stock disponible.
 - Permite agregar el producto al carrito.
 
-<img src="./screenshot/Screenshot_1705910438.png" width="300" >
-<img src="./screenshot/Screenshot_1705910442.png" width="300" >
-<img src="./screenshot/Screenshot_1705910445.png" width="300" >
-
 ### Navegación Inferior
-
-
-```javascript
-        const TabNavigator = () => {
-  return (
-        <Tab.Navigator
-          screenOptions={{
-            headerShown:false,
-            tabBarShowLabel:false,
-            tabBarStyle: styles.tabBar
-
-          }}
-        >
-          <Tab.Screen
-             name="ShopStack"
-             component={ShopStack}
-             options={{
-              tabBarIcon:({focused}) => <TabIcon icon="shop" label="Productos" focused={focused}/>
-             }}
-          />
-          <Tab.Screen 
-              name="CartStack" 
-              component={CartStack}
-              options={{
-                tabBarIcon:({focused}) =>  <TabIcon icon="shopping-cart" label="Carrito" focused={focused}/> 
-              }}
-             />
-             <Tab.Screen 
-              name="OrdersStack" 
-              component={OrdersStack}
-              options={{
-                tabBarIcon:({focused}) => <TabIcon icon="list" label="Ordenes" focused={focused}/> 
-              }}
-             />
-            <Tab.Screen 
-              name="ProfileStack" 
-              component={ProfileStack}
-              options={{
-                tabBarIcon:({focused}) => <TabIcon icon="user" label="Perfil" focused={focused}/> 
-              }}
-             />
-      </Tab.Navigator>
-  )
-}
-
-```
 
 - **Pestaña 1 - Productos:** Categorías y productos (stack principal).
 - **Pestaña 2 - Carrito:** Detalles del carrito de compras con resumen y botón para finalizar la orden.
 - **Pestaña 3 - Órdenes:** Historial de órdenes realizadas.
 - **Pestaña 4 - Perfil:** Información del usuario, ubicación y carga de imagen de perfil.
 
-<img src="./screenshot/Screenshot_1705910459.png" width="300" >
-<img src="./screenshot/Screenshot_1705910463.png" width="300" >
 
 ## Tecnologías Utilizadas
 
 - **Firebase Authentication:** Implementa el sistema de autenticación de Firebase para gestionar la seguridad de la aplicación.
 - **React Native Navigation Stack:** Gestiona la navegación entre pantallas.
-- **React Native Navigation Buttom tap:** Gestiona la navegación entre pestañas.
+- **React Native Navigation Bottom Tab:** Gestiona la navegación entre pestañas.
 - **Expo-Location:** Permite acceder y gestionar la ubicación del usuario.
 - **Expo-Picker-Image:** Facilita la carga de imágenes de perfil.
 - **Redux:** Centraliza y gestiona el estado de la aplicación.
@@ -106,12 +51,8 @@ Una aplicación de comercio electrónico desarrollada con React Native que ofrec
 
 ## Instalación
 
-1. Clona el repositorio: `git clone https://github.com/tu-usuario/tu-aplicacion.git`
+1. Clona el repositorio: `git clone https://github.com/santicivalero/proyecto_DESARROLLOAPPS_CODERHOUSE_SantiagoCivalero`
 2. Instala las dependencias: `npm install`
-3. Configura las claves de API para servicios externos (Expo-Location, Firebase, etc.).
+3. Configura las claves de API para servicios externos (Expo-Location, Firebase).
 4. Configura las credenciales de Firebase en tu proyecto.
 5. Ejecuta la aplicación: `npm start`
-
-## Contacto
-
-Para preguntas o soporte, contacta a maxi_rosanda@hotmail.com.

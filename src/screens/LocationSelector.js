@@ -30,7 +30,6 @@ const LocationSelector = () => {
                 long:newLocation.coords.longitude
             })
         } catch (error) {
-            console.log(error)
         }
      
        })()
@@ -47,7 +46,6 @@ const LocationSelector = () => {
                         const  data = await response.json()
                         setAddress(data.results[0].formatted_address)
                     } catch (error) {
-                        console.log(error)
                     }
                 }
             }

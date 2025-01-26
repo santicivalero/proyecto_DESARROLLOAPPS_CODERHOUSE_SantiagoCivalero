@@ -70,7 +70,7 @@ const Login = () => {
             error={passwordError}
           />
           <SubmitButton onPress={onSubmit} title="Continuar"/>
-          <Text style={styles.sub}>No tienen una cuenta?</Text>
+          <Text style={styles.sub}>¿No tenés una cuenta?</Text>
           <Pressable onPress={()=> navigation.navigate("Signup")} >
               <Text style={styles.subLink}>Registrarme</Text>
           </Pressable>

@@ -86,7 +86,7 @@ const Signup = () => {
           />
           <SubmitButton title="Registrarme" onPress={onSubmit}  
           />
-          <Text style={styles.sub}>Tenes cuenta registrada?</Text>
+          <Text style={styles.sub}>¿Tenés cuenta registrada?</Text>
           <Pressable onPress={()=> navigation.navigate("Login")} >
               <Text style={styles.subLink}>Login</Text>
           </Pressable>

@@ -8,7 +8,6 @@ const Categories = () => {
 
   const {data:categories,isError,error,isSuccess,isLoading} = useGetCategoriesQuery()
 
-  //if(isLoading) return <View><Text>cargando</Text></View>
   if(isLoading) return <ActivityIndicator size="large" color={colors.primary} style={styles.spinner} />
   
   if(isError) return <View><Text>{error.message}</Text></View>

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image, Pressable, Modal } from 'react-native'
+import { StyleSheet, Text, View,Image, Pressable } from 'react-native'
 import { colors } from '../globals/colors'
 import images from '../../imageAssets.js';
 import { useGetProductCartQuery, usePostCartMutation } from '../services/cart'
@@ -10,9 +10,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { reset } from "../features/counterSlice";
 
 const ProductDetail = ({route}) => {
-
+  
   const [quantity,setQuantity] = useState(0)
-  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation()
   const {product} = route.params
   const imageSource = images[product.img];
@@ -32,16 +31,6 @@ const ProductDetail = ({route}) => {
     }, [dispatch])
   );
 
-  const increment = () => {
-    const cartQuantity = productCart ? productCart.quantity : 0
-    if(quantity >= (product.stock - cartQuantity )) return
-    setQuantity(quantity + 1)
-  }
-
-  const decrement = () => {
-    if(quantity === 1) return
-    setQuantity(quantity - 1)
-  }
 
   const  handleAddproduct = async () => {
 
@@ -55,7 +44,6 @@ const ProductDetail = ({route}) => {
     await triggerAddProduct({localId,cartProduct})
     setQuantity(0)
     navigation.navigate("CartStack")
-    //setModalVisible(true);
   }
 
   return (
@@ -68,25 +56,6 @@ const ProductDetail = ({route}) => {
       <Pressable style={styles.button} onPress={handleAddproduct}>
         <Text style={styles.textButton}>Agregar al carrito</Text>
       </Pressable>
-
-      <Modal transparent={true} visible={modalVisible} animationType="fade">
-        <View style={styles.modalContainer}>
-          {quantity > 1 ? 
-          <Text style={styles.modalText}>Productos agregados al carrito</Text> 
-          : 
-          <Text style={styles.modalText}>Producto agregado al carrito</Text>
-          }
-          <Pressable>
-            <Text style={styles.modalTextCarrito} 
-                  onPress={() => navigation.navigate('CartStack', { screen: 'Cart' })}>
-              Ir al carrito
-              </Text>
-          </Pressable>
-          <Pressable onPress={() => setModalVisible(false)}>
-            <Text style={styles.closeModal}>Cerrar</Text>
-          </Pressable>
-        </View>
-      </Modal>
     </View>
   );
 }
@@ -94,7 +63,6 @@ const ProductDetail = ({route}) => {
 export default ProductDetail
 
 const styles = StyleSheet.create({
-  // ... tus estilos existentes
   container:{
     gap:10,
     flex:1
@@ -106,7 +74,6 @@ const styles = StyleSheet.create({
   },
   name:{
     fontSize:20,
-    //fontWeight:"bold",
     textAlign:"center",
     paddingVertical:20,
     fontFamily:"londrinaRegular"
@@ -137,42 +104,5 @@ const styles = StyleSheet.create({
     fontSize:20,
     color:colors.lightGray,
     fontFamily:"londrinaLight"
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.9)',
-  },
-  modalText: {
-    backgroundColor: colors.primary,
-    padding: 20,
-    borderRadius: 10,
-    textAlign: 'center',
-    fontSize: 18,
-    fontFamily: 'londrinaRegular',
-    borderColor: colors.primary,
-    borderWidth: 4
-  },
-  modalTextCarrito: {
-    backgroundColor: colors.color1,
-    padding: 10,
-    marginTop: 70,
-    borderRadius: 10,
-    textAlign: 'center',
-    fontSize: 18,
-    fontFamily: 'londrinaRegular',
-    borderColor: colors.primary,
-    borderWidth: 4
-  },
-  closeModal: {
-    marginTop: 40,
-    color: colors.primary,
-    fontSize: 24,
-    fontFamily: 'londrinaRegular',
-    borderColor: colors.color1,
-    borderRadius: 10,
-    padding: 8,
-    borderWidth: 4
-  },
+  }
 });

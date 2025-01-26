@@ -1,22 +1,21 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import CardOrder from '../components/CardOrder';
-import { useGetOrdersQuery } from '../services/orders';
+import { useGetOrdersUserQuery } from '../services/orders';
+import EmptyListComponent from '../components/EmptyListComponent';
+import { colors } from '../globals/colors';
+import { useSelector } from 'react-redux'
 
 const Orders = () => {
-  const { data: orders, isSuccess, isError, isLoading, error } = useGetOrdersQuery();
+  const localId = useSelector(state => state.user.localId)
+  const { data: orders, isLoading } = useGetOrdersUserQuery({localId});
 
-  if (isLoading) {
-    return <Text>Cargando órdenes...</Text>;
-  }
-
-  if (isError) {
-    return <Text>Error al cargar órdenes: {error.message}</Text>;
-  }
+  if(isLoading) return <ActivityIndicator size="large" color={colors.primary} style={styles.spinner} />
+  if(!orders) return <EmptyListComponent message="No hay órdenes"/>
 
   return (
     <View>
       <FlatList
-        data={Object.values(orders || {})}
+        data={orders}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <CardOrder order={item} />}
       />
@@ -26,39 +25,10 @@ const Orders = () => {
 
 export default Orders;
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 10,
-//   },
-// });
-
-
-
-
-
-
-// import { FlatList, StyleSheet, Text, View } from 'react-native'
-// import orders from '../data/orders.json'
-// import CardOrder from '../components/CardOrder'
-// import { useGetOrdersQuery } from '../services/orders'
-
-
-// const Orders = () => {
-
-//   const {data,isSuccess,isError,error,isLoading} = useGetOrdersQuery()
-
-//   return (
-//     <View>
-//       <FlatList
-//         data={orders}
-//         keyExtractor={item => item.id}
-//         renderItem={({item})=> <CardOrder order={item}/>}
-//       />
-//     </View>
-//   )
-// }
-
-// export default Orders
-
-// const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

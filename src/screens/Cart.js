@@ -140,10 +140,6 @@ buttonText:{
     backgroundColor: 'rgba(0,0,0,0.7)',
   },
   modalText: {
-    // backgroundColor: colors.lightGray,
-    // padding: 20,
-    // borderRadius: 10,
-    // textAlign: 'center',
     backgroundColor: colors.primary,
     padding: 20,
     borderRadius: 10,
@@ -157,7 +153,7 @@ buttonText:{
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-    gap: 20, // Espaciado entre los botones (puedes ajustarlo según lo necesites)
+    gap: 20,
   },
   confirmText: {
     paddingHorizontal:14,
@@ -181,4 +177,9 @@ buttonText:{
     padding: 8,
     borderWidth: 4
   },
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
