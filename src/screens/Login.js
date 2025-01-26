@@ -8,6 +8,7 @@ import { useLoginMutation } from '../services/auth'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../features/userSlice'
 import { loginSchema } from '../validations/loginSchema'
+import { deleteSesion, insertSession } from '../config/dbSqlite'
 
 
 const Login = () => {
@@ -33,6 +34,8 @@ const Login = () => {
             localId:response.data.localId
         }
         dispatch(setUser(user))
+        await deleteSesion()
+        await insertSession(user.localId,user.email,user.idToken)
     } catch (error) {
         switch(error.path){
             case "email":
@@ -66,10 +69,10 @@ const Login = () => {
             isSecure={true}
             error={passwordError}
           />
-          <SubmitButton onPress={onSubmit} title="Ingresar"/>
+          <SubmitButton onPress={onSubmit} title="Continuar"/>
           <Text style={styles.sub}>No tienen una cuenta?</Text>
           <Pressable onPress={()=> navigation.navigate("Signup")} >
-              <Text style={styles.subLink}>Reghistrarme</Text>
+              <Text style={styles.subLink}>Registrarme</Text>
           </Pressable>
       </View>
     </View>
@@ -97,17 +100,17 @@ const styles = StyleSheet.create({
     },
     title:{
       fontSize:22,
-      fontFamily:"Lobster",
+      fontFamily:"londrinaRegular",
       color:colors.lightGray
     },
     sub:{
         fontSize:14,
-        fontFamily:"Josefin",
+        fontFamily:"londrinaLight",
         color:colors.lightGray
     },
     subLink:{
         fontSize:14,
-        fontFamily:"Josefin",
+        fontFamily:"londrinaRegular",
         color:colors.lightGray
     }
 })

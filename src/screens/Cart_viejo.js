@@ -1,57 +1,53 @@
-import { StyleSheet, Text, View,FlatList, Pressable, ActivityIndicator, Modal } from 'react-native'
-import CardCartProduct from '../components/CardCartProduct'
-import { colors } from '../globals/colors'
-import { usePostOrdersMutation } from '../services/orders'
-import { useSelector } from 'react-redux'
-import { useGetCartQuery, useDeleteCartMutation, useDeleteCartProductMutation } from '../services/cart'
-import { useEffect, useState } from 'react'
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeProduct, clearCart } from '../features/cartSlice';
+import { Modal, StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
+import CardCartProduct from '../components/CardCartProduct';
+import { colors } from '../globals/colors';
+import { usePostOrdersMutation } from '../services/orders';
 import EmptyListComponent from '../components/EmptyListComponent'
-import { useNavigation } from '@react-navigation/native'
+
 
 const Cart = () => {
-  const navigation = useNavigation()
+  const cart = useSelector((state) => state.cart);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
-  const [triggerPost] = usePostOrdersMutation()
-  const [triggerDeleteCart] = useDeleteCartMutation()
-  const [triggerDeleteItemCart] = useDeleteCartProductMutation()
-  const localId = useSelector(state => state.user.localId)
-  const {data:cart,isLoading} = useGetCartQuery({localId})
-  const [total,setTotal] = useState(0)
+  const dispatch = useDispatch();
+  const [triggerPost] = usePostOrdersMutation();
 
-  useEffect(()=>{
-    if(cart){
-      setTotal(cart.reduce((acc,item) => acc + item.price * item.quantity ,0 ))
-    }
-  },[cart])
+  const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+  if(!cart) return <EmptyListComponent message="No hay productos en el carrito"/>
 
 
-
-  const confirmCart = () => {
+  const confirmCart = async () => {
     setConfirmVisible(false);
-    const createdAt = new Date().toLocaleString()
-    const order = {
-      products:cart,
-      createdAt,
-      total
+    try {
+      const newOrder = {
+        id: generateId(),
+        products: cart.products,
+        total: cart.total,
+        date: new Date().toISOString(), // Agregar la fecha
+      };
+      await triggerPost(newOrder); // Enviar los datos al servicio
+      console.log("Carrito confirmado:", newOrder);
+      dispatch(clearCart()); // Limpiar el carrito después de confirmar la compra
+    } catch (error) {
+      console.error("Error al confirmar el carrito:", error);
     }
-    triggerPost({order,localId})
-    triggerDeleteCart({localId})
-    navigation.navigate("OrdersStack")
-  }
+
+    // triggerPost({ id: '2', products: cart.products, total: cart.total });
+    // dispatch(clearCart());
+  };
 
   const handleRemoveProduct = (productId) => {
-      triggerDeleteItemCart({localId,productId})
-      setModalVisible(false);
-    };
+    dispatch(removeProduct(productId));
+    setModalVisible(false);
+  };
 
-
-  if(isLoading) return <ActivityIndicator size="large" color={colors.primary} style={styles.spinner} />
-  if(!cart) return <EmptyListComponent message="No hay productos en el carrito"/>
   return (
     <View style={styles.container}>
       <FlatList
-        data={cart}
+        data={cart.products}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <CardCartProduct
@@ -62,7 +58,7 @@ const Cart = () => {
         ListFooterComponent={<View style={{ height: 100 }} />}
       />
       <View style={styles.containerTotal}>
-        <Text style={styles.text}>Total: ${total} </Text>
+        <Text style={styles.text}>Total: {cart.total}$ ARG </Text>
         <Pressable style={styles.button} onPress={() => setConfirmVisible(true)}>
           <Text style={styles.buttonText}>Finalizar Compra</Text>
         </Pressable>
@@ -97,9 +93,9 @@ const Cart = () => {
       </Modal>
     </View>
   );
-}
+};
 
-export default Cart
+export default Cart;
 
 const styles = StyleSheet.create({
   container:{
@@ -182,3 +178,69 @@ buttonText:{
     borderWidth: 4
   },
 });
+
+
+
+
+// import { StyleSheet, Text, View,FlatList, Pressable } from 'react-native'
+// import cart from '../data/cart.json'
+// import CardCartProduct from '../components/CardCartProduct'
+// import { colors } from '../globals/colors'
+// import Counter from '../components/Counter'
+// import { usePostOrdersMutation } from '../services/orders'
+
+// const Cart = () => {
+
+//   const [triggerPost] = usePostOrdersMutation()
+
+//   const confirmCart = () => {
+//     triggerPost({id:"2",products:[{id:"2"}],total:120})
+//   }
+
+//   return (
+//     <View style={styles.container}>
+//       <FlatList
+//         data={cart.products}
+//         keyExtractor={item => item.id}
+//         renderItem={({item}) => <CardCartProduct product = {item}/>}
+//       />
+//       <View style={styles.containerTotal}>
+//         <Text style={styles.text}>Total: {cart.total}$ ARG </Text>
+//         <Pressable style={styles.button} onPress={confirmCart}>
+//             <Text style={styles.buttonText}>Finalizar Compra</Text>
+//         </Pressable>
+//       </View>
+//     </View>
+//   )
+// }
+
+// export default Cart
+
+// const styles = StyleSheet.create({
+//     container:{
+//         flex:1,
+//         position:"relative"
+//     },
+//     containerTotal:{
+//         width:"100%",
+//         backgroundColor:colors.accent,
+//         flexDirection:"row",
+//         padding:15,
+//         justifyContent:"space-around",
+//         alignItems:"center",
+//         position:"absolute",
+//         bottom:0
+//     },
+//     text:{
+//         color:colors.lightGray,
+//         fontSize:16
+//     },
+//     button:{
+//         backgroundColor:colors.primary,
+//         padding:10,
+//         borderRadius:5
+//     },
+//     buttonText:{
+//         color:colors.lightGray
+//     }
+// })

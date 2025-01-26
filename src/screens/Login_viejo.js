@@ -1,35 +1,32 @@
-import {useState } from 'react'
+import {useState} from 'react'
 import { View, Text ,StyleSheet, Pressable} from 'react-native'
+import { colors } from '../globals/colors'
 import InputForm from '../components/InputForm'
 import SubmitButton from '../components/SubmitButton'
-import { colors } from '../globals/colors'
 import { useNavigation } from '@react-navigation/native'
-import { useSignUpMutation } from '../services/auth'
+import { useLoginMutation } from '../services/auth'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../features/userSlice'
-import { signupSchema } from '../validations/signupSchema'
+import { loginSchema } from '../validations/loginSchema'
 
 
-
-const Signup = () => {
+const Login = () => {
 
   const [email,setEmail] = useState("")
   const [password,setPassword] = useState("")
-  const [confirmPassword,setConfirmPassword] = useState("")
   const [emailError,setEmailError] = useState("")
   const [passwordError,setPasswordError] = useState("")
-  const [confirmPasswordError,setConfirmPasswordError] = useState("")
   const navigation = useNavigation()
-  const [triggerSignup] = useSignUpMutation()
+  const [triggerLogin] = useLoginMutation()
   const dispatch = useDispatch()
 
-  
-  
 
   const onSubmit = async () => {
+
     try {
-        signupSchema.validateSync({email,password,confirmPassword})
-        const response =  await triggerSignup({email,password})
+        loginSchema.validateSync({email,password})
+        const response = await triggerLogin({email,password})
+
         const user = {
             email:response.data.email,
             idToken:response.data.idToken,
@@ -41,32 +38,25 @@ const Signup = () => {
             case "email":
                 setEmailError(error.message)
                 setPasswordError("")
-                setConfirmPasswordError("")
                 break
             case "password":
                 setPasswordError(error.message)
                 setEmailError("")
-                setConfirmPasswordError("")
                 break
-            case "confirmPassword":
-                setConfirmPasswordError(error.message)
-                setEmailError("")
-                setPasswordError("")
-                break
+        }
     }
   }
-}
 
 
   return (
     <View style={styles.main}>
       <View style={styles.container}>
-          <Text style={styles.title} >Registrarme</Text>
+          <Text style={styles.title} >Ingresar</Text>
           <InputForm
             label="Email"
             value={email}
             onChangeText={(t) => setEmail(t)}
-            isSecure={false}
+            isSecure = {false}
             error={emailError}
           />
           <InputForm
@@ -76,19 +66,10 @@ const Signup = () => {
             isSecure={true}
             error={passwordError}
           />
-           <InputForm
-            label="Confirmar password"
-            value={confirmPassword}
-            onChangeText={(t) => setConfirmPassword(t)}
-            isSecure={true}
-            error={confirmPasswordError}
-
-          />
-          <SubmitButton title="Registrarme" onPress={onSubmit}  
-          />
-          <Text style={styles.sub}>Tenes cuenta registrada?</Text>
-          <Pressable onPress={()=> navigation.navigate("Login")} >
-              <Text style={styles.subLink}>Login</Text>
+          <SubmitButton onPress={onSubmit} title="Ingresar"/>
+          <Text style={styles.sub}>No tienen una cuenta?</Text>
+          <Pressable onPress={()=> navigation.navigate("Signup")} >
+              <Text style={styles.subLink}>Reghistrarme</Text>
           </Pressable>
       </View>
     </View>
@@ -96,7 +77,7 @@ const Signup = () => {
 }
 
 
-export default  Signup
+export default Login
 
 
 const styles = StyleSheet.create({
@@ -116,17 +97,17 @@ const styles = StyleSheet.create({
     },
     title:{
       fontSize:22,
-      fontFamily:"londrinaRegular",
+      fontFamily:"Lobster",
       color:colors.lightGray
     },
     sub:{
-      fontSize:14,
-      fontFamily:"londrinaLight",
-      color:colors.lightGray
+        fontSize:14,
+        fontFamily:"Josefin",
+        color:colors.lightGray
     },
     subLink:{
-      fontSize:14,
-      fontFamily:"londrinaLight",
-      color:colors.lightGray
+        fontSize:14,
+        fontFamily:"Josefin",
+        color:colors.lightGray
     }
 })

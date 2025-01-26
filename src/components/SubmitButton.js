@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     text:{
         textAlign:"center",
         color:"white",
-        fontSize:18
+        fontSize:18,
+        fontFamily:"londrinaLight"
     }
 })

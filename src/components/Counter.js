@@ -1,17 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, View, Pressable, Text, TextInput } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { increment, decrement, incrementByAmount } from '../features/counterSlice';
 import { colors } from '../globals/colors';
 
-const Counter = ({ onQuantityChange }) => {
+const Counter = ({ quantity, onQuantityChange, maxStock }) => {
   const dispatch = useDispatch();
   const counter = useSelector((state) => state.counter.value);
   const [input, setInput] = useState(0);
 
+  useEffect(() => {
+    setInput(quantity);
+  }, [quantity]);
+
   const handleIncrement = () => {
-    dispatch(increment());
-    onQuantityChange(counter + 1);
+    if (counter < maxStock) {
+      dispatch(increment());
+      onQuantityChange(counter + 1);
+    }
   };
 
   const handleDecrement = () => {
@@ -23,6 +29,10 @@ const Counter = ({ onQuantityChange }) => {
 
   const handleInputChange = (value) => {
     const quantity = parseInt(value, 10) || 0;
+
+    if (quantity > maxStock) quantity = maxStock;
+    if (quantity < 0) quantity = 0;
+
     setInput(quantity);
     dispatch(incrementByAmount(quantity - counter));
     onQuantityChange(quantity);

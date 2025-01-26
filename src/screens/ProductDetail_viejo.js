@@ -1,62 +1,29 @@
-import { StyleSheet, Text, View,Image, Pressable, Modal } from 'react-native'
-import { colors } from '../globals/colors'
-import images from '../../imageAssets.js';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addProduct } from '../features/cartSlice';
+import { Modal, StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import Header from '../components/Header';
 import { useGetProductCartQuery, usePostCartMutation } from '../services/cart'
-import { useSelector, useDispatch } from 'react-redux'
-import { useNavigation } from '@react-navigation/native'
-import Counter from '../components/Counter'
-import { useState, useCallback } from 'react'
-import { useFocusEffect } from '@react-navigation/native';
-import { reset } from "../features/counterSlice";
+import Counter from '../components/Counter';
+import { colors } from '../globals/colors';
+import images from '../../imageAssets.js';
+import { useNavigation } from '@react-navigation/native';
 
-const ProductDetail = ({route}) => {
-
-  const [quantity,setQuantity] = useState(0)
-  const [modalVisible, setModalVisible] = useState(false);
-  const navigation = useNavigation()
-  const {product} = route.params
+const ProductDetail = ({ route }) => {
+  const { product } = route.params;
   const imageSource = images[product.img];
-  const localId = useSelector(state => state.user.localId)
+  const [modalVisible, setModalVisible] = useState(false);
+  const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
-  const [triggerAddProduct] = usePostCartMutation()
-  const {data:productCart} = useGetProductCartQuery({localId,productId:product.id})
+  const navigation = useNavigation();
 
-  
-  const cartQuantity = productCart ? productCart.quantity : 0;
-  const availableStock = product.stock - cartQuantity
-
-
-  useFocusEffect(
-    useCallback(() => {
-      dispatch(reset());
-    }, [dispatch])
-  );
-
-  const increment = () => {
-    const cartQuantity = productCart ? productCart.quantity : 0
-    if(quantity >= (product.stock - cartQuantity )) return
-    setQuantity(quantity + 1)
-  }
-
-  const decrement = () => {
-    if(quantity === 1) return
-    setQuantity(quantity - 1)
-  }
-
-  const  handleAddproduct = async () => {
-
-    const cartQuantity = productCart ? productCart.quantity : 0
-    if((product.stock - cartQuantity) === 0 ) return
-    const newQuantity = quantity + cartQuantity
-    const cartProduct = {
-      ...product,
-      quantity:newQuantity
-    }
-    await triggerAddProduct({localId,cartProduct})
-    setQuantity(0)
-    navigation.navigate("CartStack")
-    //setModalVisible(true);
-  }
+  const handleAddToCart = () => {
+    if (quantity <= 0) return;
+    const productWithQuantity = { ...product, quantity };
+    dispatch(addProduct(productWithQuantity));
+    // dispatch(addProduct(product));
+    setModalVisible(true);
+  };
 
   return (
     <View style={styles.container}>
@@ -64,8 +31,8 @@ const ProductDetail = ({route}) => {
       <Text style={styles.name}>{product.name}</Text>
       <Text style={styles.description}>{product.description}</Text>
       <Text style={styles.price}>${product.price}</Text>
-      <Counter quantity={quantity} onQuantityChange={setQuantity} maxStock={availableStock} />
-      <Pressable style={styles.button} onPress={handleAddproduct}>
+      <Counter onQuantityChange={setQuantity} />
+      <Pressable style={styles.button} onPress={handleAddToCart}>
         <Text style={styles.textButton}>Agregar al carrito</Text>
       </Pressable>
 
@@ -89,9 +56,9 @@ const ProductDetail = ({route}) => {
       </Modal>
     </View>
   );
-}
+};
 
-export default ProductDetail
+export default ProductDetail;
 
 const styles = StyleSheet.create({
   // ... tus estilos existentes
@@ -176,3 +143,77 @@ const styles = StyleSheet.create({
     borderWidth: 4
   },
 });
+
+
+
+
+
+
+// import { StyleSheet, Text, View,Image, Pressable } from 'react-native'
+// import Header from '../components/Header'
+// import { colors } from '../globals/colors'
+// import images from '../../imageAssets.js';
+
+// const ProductDetail = ({route}) => {
+
+//   const {product} = route.params
+//   const imageSource = images[product.img]
+
+//   return (
+//     <View style={styles.container}>
+//       <Image source={imageSource} style={styles.image} resizeMode='contain'/>
+//       <Text style={styles.name}>{product.name}</Text>
+//       <Text style={styles.description}>{product.description}</Text>
+//       <Text style={styles.price}>${product.price}</Text>
+//       <Pressable style={styles.button}>
+//         <Text style={styles.textButton}>Agregar al carrito</Text>
+//       </Pressable>
+//     </View>
+//   )
+// }
+
+// export default ProductDetail
+
+// const styles = StyleSheet.create({
+//   container:{
+//     gap:10
+//   },
+//   image:{
+//     width:"100%",
+//     height:200,
+//     backgroundColor: colors.color1
+//   },
+//   name:{
+//     fontSize:20,
+//     fontWeight:"bold",
+//     textAlign:"center",
+//     paddingVertical:20,
+//     fontFamily:"londrinaRegular"
+//   },
+//   description:{
+//     fontSize:14,
+//     padding:20,
+//     textAlign:"center",
+//     fontFamily:"londrinaLight"
+//   },
+//   price:{
+//     fontSize:20,
+//     paddingHorizontal:50,
+//     paddingVertical:20,
+//     textAlign:"right",
+//     fontFamily:"londrinaRegular",
+//     textAlign:"center"
+//   },
+//   button:{
+//     backgroundColor:colors.accent,
+//     marginHorizontal:10,
+//     padding:10,
+//     alignItems:"center",
+//     borderRadius:6
+//   },
+//   textButton:{
+//     fontSize:20,
+//     color:colors.lightGray,
+//     fontFamily:"londrinaLight"
+//   }
+// })
