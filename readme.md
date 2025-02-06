@@ -48,6 +48,7 @@ de un proyecto hecho para React, con algunas variantes en tecnologías: https://
 - **Expo-Picker-Image:** Facilita la carga de imágenes de perfil.
 - **Redux:** Centraliza y gestiona el estado de la aplicación.
 - **RTK Query y Firebase:** Realiza operaciones de lectura/escritura en la base de datos.
+- **SQLite:** Permite el almacenamiento y gestión de datos locales en la aplicación.
 
 ## Instalación
 
